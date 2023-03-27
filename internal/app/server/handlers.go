@@ -1,3 +1,4 @@
+// Application basic web handlers
 package server
 
 import (
@@ -6,5 +7,5 @@ import (
 )
 
 func GetHomePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "G-Leo Systems Estimation")
+	fmt.Fprintf(w, "GLEOS Estimation Home Page")
 }

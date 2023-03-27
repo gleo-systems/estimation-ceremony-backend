@@ -3,10 +3,10 @@ package main
 
 import (
 	"gleos/estimation/internal/app/server"
-	"log"
+	"gleos/estimation/internal/pkg/log"
 )
 
 func main() {
-	log.Println("Starting gleos-estimation application...")
+	log.Info("Starting gleos-estimation application")
 	server.Run()
 }
