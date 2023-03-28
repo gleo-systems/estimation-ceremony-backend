@@ -1,17 +1,25 @@
-// Application starting point
+// Application command line runner
 package main
 
 import (
-	"flag"
 	"gleos/estimation/internal/app/server"
 	"gleos/estimation/internal/pkg/log"
+
+	goflags "github.com/jessevdk/go-flags"
 )
 
-var netDomain = flag.String("domain", "localhost", "local network domain")
-var netPort = flag.Int("port", 8000, "local network port")
+type Parameters struct {
+	Domain string `long:"domain" description:"Local network domain" required:"true"`
+	Port   uint   `long:"port" description:"Local network port" required:"true"`
+}
 
 func main() {
-	config := server.NewConfig(*netDomain, *netPort)
-	log.Infow("Starting gleos-estimation application", "config", config)
+	var params Parameters
+	if _, err := goflags.Parse(&params); err != nil {
+		panic(err)
+	}
+	config := server.NewConfig(params.Domain, params.Port)
+
+	log.Infow("Starting application", "params", params)
 	server.Run(config)
 }

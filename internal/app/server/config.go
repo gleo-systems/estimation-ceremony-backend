@@ -1,17 +1,25 @@
-// Application web server configuration
+// Application server configuration
 package server
 
 import "strconv"
 
-type Config struct {
-	netDomain string
-	netPort   int
+func NewConfig(netDomain string, netPort uint) config {
+	return config{network: netConfig{netDomain, netPort}}
 }
 
-func (cfg Config) getNetAddr() string {
-	return cfg.netDomain + ":" + strconv.Itoa(cfg.netPort)
+type config struct {
+	network netConfig
 }
 
-func NewConfig(netDomain string, netPort int) Config {
-	return Config{netDomain, netPort}
+type netConfig struct {
+	domain string
+	port   uint
+}
+
+func (cfg netConfig) getAddr() string {
+	return cfg.domain + ":" + uitoa(cfg.port)
+}
+
+func uitoa(ui uint) string {
+	return strconv.FormatUint(uint64(ui), 10)
 }

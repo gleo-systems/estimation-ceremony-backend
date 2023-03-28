@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-func Run(cfg Config) {
-	netAddr := cfg.getNetAddr()
+func Run(cfg config) {
+	netAddr := cfg.network.getAddr()
 	log.Infow("Running web server...", "network", netAddr)
 	initRouting()
 	log.Errorw("Web server initialization failed", "err", http.ListenAndServe(netAddr, nil))
