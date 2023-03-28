@@ -8,7 +8,12 @@ import (
 var logger *zap.SugaredLogger
 
 func init() {
-	zapLogger, _ := zap.NewDevelopment()
+	zapLogger, err := zap.NewDevelopmentConfig().
+		Build(zap.AddCallerSkip(1))
+
+	if err != nil {
+		panic(err)
+	}
 	defer zapLogger.Sync()
 	logger = zapLogger.Sugar()
 }
