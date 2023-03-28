@@ -1,6 +1,8 @@
 # Project Description
-Scrum estimation ceremony tool.\
-Provides back-end service implementation.\
+Scrum estimation ceremony tool.
+
+Provides back-end service implementation.
+
 Supports multi-user concurrent access through WebSockets and OAuth2 authentication.
 
 # Technology Stack
@@ -8,12 +10,12 @@ Supports multi-user concurrent access through WebSockets and OAuth2 authenticati
 2. nhooyr/websocket
 
 # Project Structure
-```
+```bash
 .
-|-- cmd/gleos-estimation    # Application command line runner
+|-- cmd/gleos-estimation            # Provides application command line runner
 |-- internal
-|   |-- app                 # Features implementation code
-|   |-- pkg                 # Shared implementation code
+|   |-- app                         # Features code location
+|   |-- pkg                         # Shared code location
 |-- .gitignore
 |-- go.mod
 |-- go.sum
@@ -21,5 +23,5 @@ Supports multi-user concurrent access through WebSockets and OAuth2 authenticati
 ```
 
 # TODO
-1. Websockets logic
-2. Keycloak integration
+1. Websockets core logic (IN_PROGRESS)
+2. Keycloak server integration
