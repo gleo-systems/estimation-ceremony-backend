@@ -3,8 +3,8 @@ package server
 
 import "strconv"
 
-func NewConfig(netDomain string, netPort uint) config {
-	return config{network: netConfig{netDomain, netPort}}
+func NewConfig(domain string, port uint) config {
+	return config{network: netConfig{domain, port}}
 }
 
 type config struct {

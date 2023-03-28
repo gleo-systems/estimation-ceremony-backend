@@ -9,7 +9,7 @@ import (
 
 func Run(cfg config) {
 	netAddr := cfg.network.getAddr()
-	log.Infow("Running web server...", "network", netAddr)
+	log.Infow("Running web server...", "address", netAddr)
 	initRouting()
 	log.Errorw("Web server initialization failed", "err", http.ListenAndServe(netAddr, nil))
 }
