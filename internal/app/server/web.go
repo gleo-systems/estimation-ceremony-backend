@@ -1,24 +1,24 @@
-// Application web server configuration
+// Application web server definition
 package server
 
 import (
+	"fmt"
 	"gleos/estimation/internal/pkg/log"
 	"net/http"
 )
 
-const (
-	_NETWORK_DOMAIN = "localhost"
-	_NETWORK_PORT   = "8000"
-)
-
-func Run() {
-	networkAddr := _NETWORK_DOMAIN + ":" + _NETWORK_PORT
-	log.Infow("Running web server...", "network", networkAddr)
+func Run(cfg Config) {
+	netAddr := cfg.getNetAddr()
+	log.Infow("Running web server...", "network", netAddr)
 	initRouting()
-	log.Errorw("Web server initialization failed", "err", http.ListenAndServe(networkAddr, nil))
+	log.Errorw("Web server initialization failed", "err", http.ListenAndServe(netAddr, nil))
 }
 
 func initRouting() {
-	http.HandleFunc("/", GetHomePage)
+	http.HandleFunc("/status", getStatus)
 	log.Info("Web server router successfully initilized")
+}
+
+func getStatus(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Web server is running")
 }

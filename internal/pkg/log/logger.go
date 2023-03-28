@@ -1,4 +1,4 @@
-// Application logger facade
+// Application generic logger facade
 package log
 
 import (
