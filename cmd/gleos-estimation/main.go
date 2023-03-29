@@ -2,8 +2,8 @@
 package main
 
 import (
-	"gleos/estimation/internal/app/server"
-	"gleos/estimation/internal/pkg/log"
+	"gleos/estimation/internal/app/gleos-estimation/log"
+	"gleos/estimation/internal/app/gleos-estimation/server"
 
 	goflags "github.com/jessevdk/go-flags"
 )
@@ -19,7 +19,7 @@ func main() {
 		panic(err)
 	}
 	config := server.NewConfig(opts.Domain, opts.Port)
+	log.Infow("Running application by command", "options", opts)
 
-	log.Infow("Starting application...", "params", opts)
-	server.Run(config)
+	server.NewInstance(config).Run()
 }
