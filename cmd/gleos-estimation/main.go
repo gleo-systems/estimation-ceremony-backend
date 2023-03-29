@@ -3,7 +3,7 @@ package main
 
 import (
 	"gleos/estimation/internal/app/gleos-estimation/log"
-	"gleos/estimation/internal/app/gleos-estimation/server"
+	"gleos/estimation/internal/app/gleos-estimation/websockets"
 
 	goflags "github.com/jessevdk/go-flags"
 )
@@ -18,8 +18,10 @@ func main() {
 	if _, err := goflags.Parse(&opts); err != nil {
 		panic(err)
 	}
-	config := server.NewConfig(opts.Domain, opts.Port)
-	log.Infow("Running application by command", "options", opts)
+	config := websockets.NewConfig(opts.Domain, opts.Port)
+	log.Infow("Application started by command", "options", opts)
 
-	server.NewInstance(config).Run()
+	if err := websockets.RunServer(config); err != nil {
+		panic(err)
+	}
 }
