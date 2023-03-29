@@ -1,9 +1,9 @@
-// Application command line runner
+// The gleos-estimation command runs the application
 package main
 
 import (
 	"gleos/estimation/internal/app/gleos-estimation/log"
-	"gleos/estimation/internal/app/gleos-estimation/websockets"
+	"gleos/estimation/internal/app/gleos-estimation/websocket"
 
 	goflags "github.com/jessevdk/go-flags"
 )
@@ -18,10 +18,10 @@ func main() {
 	if _, err := goflags.Parse(&opts); err != nil {
 		panic(err)
 	}
-	config := websockets.NewConfig(opts.Domain, opts.Port)
-	log.Infow("Application started by command", "options", opts)
+	config := websocket.NewConfig(opts.Domain, opts.Port)
+	log.Infow("Executed gleos-estimation command", "options", opts)
 
-	if err := websockets.RunServer(config); err != nil {
+	if err := websocket.RunServer(config); err != nil {
 		panic(err)
 	}
 }

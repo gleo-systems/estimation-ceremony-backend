@@ -1,4 +1,4 @@
-// Application generic logger facade
+// Package log provides generic logging functions, decouples from external logging library
 package log
 
 import (
@@ -24,6 +24,10 @@ func Info(args ...any) {
 
 func Infow(msg string, keyAndValues ...any) {
 	logger.Infow(msg, keyAndValues...)
+}
+
+func Debug(args ...any) {
+	logger.Debug(args...)
 }
 
 func Debugw(msg string, keyAndValues ...any) {
