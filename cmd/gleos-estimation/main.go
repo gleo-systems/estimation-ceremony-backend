@@ -21,7 +21,8 @@ func main() {
 	config := websocket.NewConfig(opts.Domain, opts.Port)
 	log.Infow("Executed gleos-estimation command", "options", opts)
 
-	if err := websocket.RunServer(config); err != nil {
+	srv := websocket.NewServer(config)
+	if err := srv.HandleConnections(); err != nil {
 		panic(err)
 	}
 }

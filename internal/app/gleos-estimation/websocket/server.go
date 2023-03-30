@@ -1,5 +1,5 @@
-// Package server provides handlers for WebSockets incoming connections
-package server
+// Package websocket provides WebSockets server implementation to handle clients connections
+package websocket
 
 import (
 	"gleos/estimation/internal/app/gleos-estimation/log"
@@ -10,28 +10,32 @@ import (
 	"github.com/gobwas/ws/wsutil"
 )
 
+func NewConfig(netDomain string, netPort uint) Config {
+	return Config{netDomain, netPort}
+}
+
 type Config struct {
-	Network NetConfig
+	netDomain string
+	netPort   uint
 }
 
-type NetConfig struct {
-	Domain string
-	Port   uint
+func (cfg Config) GetNetAddr() string {
+	return cfg.netDomain + ":" + uitoa(cfg.netPort)
 }
 
-func (cfg NetConfig) getAddr() string {
-	return cfg.Domain + ":" + uitoa(cfg.Port)
+func NewServer(cfg Config) Server {
+	return Server{cfg: cfg}
 }
 
 type Server struct {
-	Cfg Config
+	cfg Config
 }
 
 func (srv Server) HandleConnections() (err error) {
-	netAddr := srv.Cfg.Network.getAddr()
+	netAddr := srv.cfg.GetNetAddr()
 	log.Infow("Running WebSockets server", "address", netAddr)
 
-	err = http.ListenAndServe(netAddr, http.HandlerFunc(EchoResponseHandler))
+	err = http.ListenAndServe(netAddr, http.HandlerFunc(echoResponseHandler))
 	if err != nil {
 		log.Errorw("WebSockets server initialization failed", "err", err)
 		return err
@@ -40,12 +44,12 @@ func (srv Server) HandleConnections() (err error) {
 	return nil
 }
 
-func EchoResponseHandler(w http.ResponseWriter, r *http.Request) {
+func echoResponseHandler(w http.ResponseWriter, r *http.Request) {
 	conn, _, _, err := ws.UpgradeHTTP(r, w)
 	if err != nil {
-		log.Errorw("Cannot upgrade websocket connection", "err", err)
+		log.Errorw("Cannot upgrade to websocket connection", "err", err)
 	}
-	log.Debugw("Websocket connection succesfully upgraded")
+	log.Debug("Established new client connection")
 
 	go func() {
 		defer conn.Close()
@@ -55,6 +59,8 @@ func EchoResponseHandler(w http.ResponseWriter, r *http.Request) {
 				log.Errorw("Cannot read client data", "err", err)
 				break
 			}
+			log.Debugw("Read client data", "payload", string(payload))
+
 			err = wsutil.WriteServerMessage(conn, op, payload)
 			if err != nil {
 				log.Errorw("Cannot write server data", "err", err)
