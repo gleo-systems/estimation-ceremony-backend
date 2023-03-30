@@ -2,8 +2,8 @@
 package main
 
 import (
-	"gleos/estimation/internal/app/gleos-estimation/log"
-	"gleos/estimation/internal/app/gleos-estimation/websocket"
+	"estimation-ceremony/internal/log"
+	"estimation-ceremony/internal/websocket"
 
 	// akokot - consider github.com/spf13/cobra replacement
 	goflags "github.com/jessevdk/go-flags"

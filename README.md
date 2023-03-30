@@ -1,13 +1,11 @@
 # Project Description
-Scrum estimation ceremony tool.
+Scrum estimation ceremony back-end service implementation.
 
-Provides back-end service implementation.
-
-Supports multi-user concurrent access through WebSockets and OAuth2 authentication.
+[TODO] Supports multi-user concurrent access through WebSockets and OAuth2 authentication.
 
 # Run Server
 ```bash
-go build -o estimation-ceremony /cmd/estimation-ceremony/main.go
+go build -o estimation-ceremony cmd/estimation-ceremony/main.go
 ./estimation-ceremony --domain {domain} --port {port}
 ```
 
@@ -16,7 +14,7 @@ Install and run third party client.
 
 ```bash
 go install github.com/hashrocket/ws@latest
-ws ws://{domain}:{neport} 
+ws ws://{domain}:{port} 
 ```
 
 # Project Structure
@@ -35,5 +33,4 @@ ws ws://{domain}:{neport}
 ```
 
 # TODO
-1. Websockets core logic (IN_PROGRESS)
-2. Keycloak server integration
+1. Keycloak server integration

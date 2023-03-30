@@ -1,4 +1,4 @@
-module gleos/estimation
+module estimation-ceremony
 
 go 1.20
 
