@@ -1,10 +1,11 @@
-// The gleos-estimation command runs the application
+// The estimation-ceremony command implementation running application server
 package main
 
 import (
 	"gleos/estimation/internal/app/gleos-estimation/log"
 	"gleos/estimation/internal/app/gleos-estimation/websocket"
 
+	// akokot - consider github.com/spf13/cobra replacement
 	goflags "github.com/jessevdk/go-flags"
 )
 
