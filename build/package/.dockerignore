@@ -1,0 +1,6 @@
+build
+deployments
+.dockerignore
+.gitignore
+Dockerfile
+README.md

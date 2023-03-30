@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	// TODO: akokot - consider using Web framework github.com/labstack/echo/v4
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
 )
@@ -35,13 +36,19 @@ func (srv Server) HandleConnections() (err error) {
 	netAddr := srv.cfg.GetNetAddr()
 	log.Infow("Running WebSockets server", "address", netAddr)
 
-	err = http.ListenAndServe(netAddr, http.HandlerFunc(echoResponseHandler))
+	router := initRouting()
+	err = http.ListenAndServe(netAddr, router)
 	if err != nil {
 		log.Errorw("WebSockets server initialization failed", "err", err)
 		return err
 	}
+	return
+}
 
-	return nil
+func initRouting() (router *http.ServeMux) {
+	router = http.NewServeMux()
+	router.HandleFunc("/echo", echoResponseHandler)
+	return
 }
 
 func echoResponseHandler(w http.ResponseWriter, r *http.Request) {
