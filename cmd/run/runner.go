@@ -6,6 +6,7 @@ import (
 	"estimation/ceremony/internal/websocket"
 	"os"
 
+	// TODO: akokot - consider use of github.com/spf13/viper
 	"github.com/spf13/cobra"
 )
 
