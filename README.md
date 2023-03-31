@@ -11,20 +11,20 @@ go run main.go run -h localhost -p 8000
 ```
 
 # Run In Container
-Run commands in project root directory. It creates `image version 0.0.1` of a server accepting connection on local machine `port 8000`.
+Run commands in project root directory. Optionally pass container name option `--name estimation-ceremony-backend-v0.0.1`.
 
 ```bash
 docker build -f ./build/package/Dockerfile -t estimation-ceremony-backend:0.0.1 ./
 docker run -p 8000:8000 estimation-ceremony-backend:0.0.1
 ```
 
-Optionally pass container name option `--name estimation-ceremony-backend-v0.0.1`.
+It creates `image version 0.0.1` of a server accepting connection on local machine `port 8000`.
 
 # Use Client
 Install command line client as described in `https://github.com/vi/websocat`.
 
 ```bash
-websocat ws://127.0.0.1:8000/{websockets-endpoint}
+websocat ws://127.0.0.1:8000/{application-endpoint}
 ```
 
 # Project Structure
@@ -33,7 +33,9 @@ websocat ws://127.0.0.1:8000/{websockets-endpoint}
 |-- build/package                   # Provides Docker configuration files
 |-- cmd/run                         # Run application command implementation
 |-- deoployments                    # Provides CloudFormation/Kubernetes provisioning files 
-|-- internal                        # Application business logic source code
+|-- internal                        # Application business logic implementation
+|   |-- log
+|   |-- websocket
 |   |-- ...
 |-- .gitignore
 |-- go.mod
