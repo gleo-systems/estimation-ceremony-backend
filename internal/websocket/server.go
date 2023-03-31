@@ -1,27 +1,19 @@
-// Package websocket provides WebSockets server implementation to handle clients connections
+// Package websocket provides WebSockets server implementation to handle full-duplex communication
 package websocket
 
 import (
-	"estimation-ceremony/internal/log"
+	"estimation/ceremony/internal/log"
 	"net/http"
 	"strconv"
-
-	// TODO: akokot - consider using Web framework github.com/labstack/echo/v4
-	"github.com/gobwas/ws"
-	"github.com/gobwas/ws/wsutil"
 )
 
-func NewConfig(netDomain string, netPort uint) Config {
-	return Config{netDomain, netPort}
+func NewConfig(host string, port int) Config {
+	return Config{host, port}
 }
 
 type Config struct {
-	netDomain string
-	netPort   uint
-}
-
-func (cfg Config) GetNetAddr() string {
-	return cfg.netDomain + ":" + uitoa(cfg.netPort)
+	host string
+	port int
 }
 
 func NewServer(cfg Config) Server {
@@ -33,50 +25,21 @@ type Server struct {
 }
 
 func (srv Server) HandleConnections() (err error) {
-	netAddr := srv.cfg.GetNetAddr()
-	log.Infow("Running WebSockets server", "address", netAddr)
+	addr := srv.cfg.host + ":" + strconv.Itoa(srv.cfg.port)
+	log.Infow("Running websockets server", "address", addr)
 
 	router := initRouting()
-	err = http.ListenAndServe(netAddr, router)
+	err = http.ListenAndServe(addr, router)
 	if err != nil {
-		log.Errorw("WebSockets server initialization failed", "err", err)
+		log.Errorw("Websockets server initialization failed", "err", err)
 		return err
 	}
 	return
 }
 
+// TODO: akokot - consider using WEB framework github.com/labstack/echo/v4
 func initRouting() (router *http.ServeMux) {
 	router = http.NewServeMux()
 	router.HandleFunc("/echo", echoResponseHandler)
 	return
-}
-
-func echoResponseHandler(w http.ResponseWriter, r *http.Request) {
-	conn, _, _, err := ws.UpgradeHTTP(r, w)
-	if err != nil {
-		log.Errorw("Cannot upgrade to websocket connection", "err", err)
-	}
-	log.Debug("Established new client websocket connection")
-
-	go func() {
-		defer conn.Close()
-		for {
-			payload, op, err := wsutil.ReadClientData(conn)
-			if err != nil {
-				log.Errorw("Cannot read client data", "err", err)
-				break
-			}
-			log.Debugw("Read client data", "payload", string(payload))
-
-			err = wsutil.WriteServerMessage(conn, op, payload)
-			if err != nil {
-				log.Errorw("Cannot write server data", "err", err)
-				break
-			}
-		}
-	}()
-}
-
-func uitoa(ui uint) string {
-	return strconv.FormatUint(uint64(ui), 10)
 }

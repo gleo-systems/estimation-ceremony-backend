@@ -3,37 +3,38 @@ Scrum estimation ceremony back-end service implementation.
 
 [TODO] Supports multi-user concurrent access through WebSockets and OAuth2 authentication.
 
-# Run Server
+# Run Application
 Run commands in project root directory:
+
 ```bash
-go build -o estimation-ceremony-backend cmd/estimation-ceremony/main.go
-./estimation-ceremony-backend --domain {domain} --port {port}
+go run main.go run -h localhost -p 8000
 ```
 
-# Run Container
-Run commands in project root directory:
+# Run In Container
+Run commands in project root directory. It creates `image version 0.0.1` of a server accepting connection on local machine `port 8000`.
+
 ```bash
-docker build -f ./build/package/Dockerfile -t estimation-ceremony-backend:{version} .
-docker run -p 0.0.0.0:{port}:8000 estimation-ceremony-backend:{version}
+docker build -f ./build/package/Dockerfile -t estimation-ceremony-backend:0.0.1 ./
+docker run -p 8000:8000 estimation-ceremony-backend:0.0.1
 ```
-Optionally run container with a name `--name estimation-ceremony-backend-v{version}`.
+
+Optionally pass container name option `--name estimation-ceremony-backend-v0.0.1`.
 
 # Use Client
-Install globally third party client and run command:
+Install command line client as described in `https://github.com/vi/websocat`.
+
 ```bash
-go install github.com/hashrocket/ws@latest
-ws ws://{domain}:{port} 
+websocat ws://127.0.0.1:8000/{websockets-endpoint}
 ```
 
 # Project Structure
 ```bash
 .
-|-- build/package                   # Provides Docker container definition
-|-- cmd/gleos-estimation            # Provides application command line runner
-|-- deoployments                    # Provides CloudFormation/Kubernetes deployment definitions
-|-- internal
-|   |-- app                         # Features code location
-|   |-- pkg                         # Shared code location
+|-- build/package                   # Provides Docker configuration files
+|-- cmd/run                         # Run application command implementation
+|-- deoployments                    # Provides CloudFormation/Kubernetes provisioning files 
+|-- internal                        # Application business logic source code
+|   |-- ...
 |-- .gitignore
 |-- go.mod
 |-- go.sum
