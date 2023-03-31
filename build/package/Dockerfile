@@ -1,17 +1,18 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.20-alpine AS builder
+FROM golang:1.20-alpine
 
-WORKDIR /build
+# stage BUILD
+WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 COPY ./ ./
 RUN go build -o estimation-ceremony-backend main.go
 
-FROM scratch
-
-WORKDIR /app
-COPY --from=builder /build/estimation-ceremony-backend /app/estimation-ceremony-backend
+# stage SETUP
+ENV HOST=0.0.0.0
+ENV PORT=8000
 EXPOSE 8000
-ENTRYPOINT ["/app/estimation-ceremony-backend", "run", "-h", "0.0.0.0", "-p", "8000"]
+WORKDIR /app
+ENTRYPOINT ./estimation-ceremony-backend run -h ${HOST} -p ${PORT}
